@@ -1,24 +1,26 @@
 import Button from "./button";
 // import { secondaryButtons } from "./lib/constants";
+import { useItemsStore } from "../Stores/itemsStore";
 
-export default function Buttons({
-  handleRemoveAllItems,
-  handleResetToInitial,
-  handleMarkAllAsComplete,
-  handleMarkAllAsInComplete,
-}) {
+export default function Buttons() {
+  const markAllAsComplete = useItemsStore((state) => state.markAllAsComplete);
+  const markAllAsInComplete = useItemsStore(
+    (state) => state.markAllAsInComplete,
+  );
+  const resetToInitial = useItemsStore((state) => state.resetToInitial);
+  const removeAllItems = useItemsStore((state) => state.removeAllItems);
   return (
     <section className="button-group">
-      <Button onClick={handleMarkAllAsComplete} buttonType="secondary">
+      <Button onClick={markAllAsComplete} buttonType="secondary">
         Mark all as complete
       </Button>
-      <Button onClick={handleMarkAllAsInComplete} buttonType="secondary">
+      <Button onClick={markAllAsInComplete} buttonType="secondary">
         Mark all as incomplete
       </Button>
-      <Button onClick={handleResetToInitial} buttonType="secondary">
+      <Button onClick={resetToInitial} buttonType="secondary">
         Reset to initial
       </Button>
-      <Button onClick={handleRemoveAllItems} buttonType="secondary">
+      <Button onClick={removeAllItems} buttonType="secondary">
         Remove all items
       </Button>
     </section>
