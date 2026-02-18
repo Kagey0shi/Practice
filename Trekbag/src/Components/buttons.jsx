@@ -7,7 +7,8 @@ export default function Buttons() {
   const markAllAsInComplete = useItemsStore(
     (state) => state.markAllAsInComplete,
   );
-  const resetToInitial = useItemsStore((state) => state.resetToInitial);
+  const resetToInitial = useItemsStore((state) => state.resetToInitialItems);
+
   const removeAllItems = useItemsStore((state) => state.removeAllItems);
   return (
     <section className="button-group">
