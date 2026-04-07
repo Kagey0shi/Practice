@@ -26,6 +26,7 @@ export default function FeedbackItemsContextProvider({
     useFeedbackItems();
   const [selectedCompany, setSelectedCompany] = useState("");
 
+  //populate company list from feedback items and remove duplicates
   const companyList = useMemo(
     () =>
       feedbackItems
@@ -34,6 +35,7 @@ export default function FeedbackItemsContextProvider({
     [feedbackItems],
   );
 
+//filter by selected company
   const filteredFeedbackItems = useMemo(
     () =>
       selectedCompany
@@ -41,7 +43,7 @@ export default function FeedbackItemsContextProvider({
         : feedbackItems,
     [feedbackItems, selectedCompany],
   );
-  // const handleAddFeedback =
+
 
   const handleSelectCompany = (company: string) => {
     setSelectedCompany(company);

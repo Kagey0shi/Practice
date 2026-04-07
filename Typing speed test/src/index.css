@@ -1,0 +1,171 @@
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* BASE */
+body {
+  margin: 0;
+  padding: 0 80px;
+  background-color: black;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Sora", sans-serif;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  scrollbar-width: none; /* Firefox */
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.body::-webkit-scrollbar {
+  /* Chrome, Safari, Edge, Opera, All browsers on iOS */
+  display: none;
+}
+
+button {
+  font-family: "Sora", sans-serif;
+}
+
+.best {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.stats {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-and-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.settings {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 10px;
+}
+
+.difficulty-mode {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-btn {
+  background-color: transparent;
+  color: white;
+  border: 1px solid #343434;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.settings-btn:hover {
+  border: 1px solid #535bf2;
+  background-color: transparent;
+}
+
+.active {
+  color: #646cff;
+  border: 1px solid #646cff;
+}
+
+.active:hover {
+  color: #646cff;
+}
+
+.typing-area {
+  display: flex;
+  justify-content: center;
+  font-size: 32px;
+  align-items: flex-start;
+  padding: 20px;
+  border-bottom: 1px solid #333;
+  flex: 1;
+}
+
+.restart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.restart-btn {
+  background-color: rgb(32, 32, 32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  border: 0px solid #333;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.typing-area-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.start-test {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.85);
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+}
+
+.start-overlay-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+  text-decoration: underline;
+}
