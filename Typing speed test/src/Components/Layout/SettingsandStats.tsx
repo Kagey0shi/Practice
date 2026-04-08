@@ -10,6 +10,7 @@ export default function SettingsandStats({
   wpm,
   time,
   accuracy,
+  isDisabled,
 }: {
   time: number;
   setDifficulty: (difficulty: Difficulty) => void;
@@ -18,6 +19,7 @@ export default function SettingsandStats({
   setMode: (mode: Mode) => void;
   accuracy: number;
   wpm: number;
+  isDisabled: boolean;
 }) {
   return (
     <div className="settings-and-stats">
@@ -27,6 +29,7 @@ export default function SettingsandStats({
         difficulty={difficulty}
         mode={mode}
         setMode={setMode}
+        isDisabled={isDisabled}
       />
     </div>
   );

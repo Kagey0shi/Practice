@@ -7,19 +7,22 @@ export default function Settings({
   difficulty,
   mode,
   setMode,
+  isDisabled,
 }: {
   setDifficulty: (difficulty: Difficulty) => void;
   difficulty: Difficulty;
   mode: Mode;
   setMode: (mode: Mode) => void;
+  isDisabled: boolean;
 }) {
   return (
     <div className="settings">
       <DifficultyComponent
         setDifficulty={setDifficulty}
         difficulty={difficulty}
+        isDisabled={isDisabled}
       />
-      <ModeComponent mode={mode} setMode={setMode} />
+      <ModeComponent mode={mode} setMode={setMode} isDisabled={isDisabled} />
     </div>
   );
 }

@@ -2,15 +2,8 @@ import { useEffect } from "react";
 import { useAppContext } from "../../Contexts/AppContextProvider";
 
 export default function TypingArea() {
-  const {
-    passage,
-    typedText,
-    setTypedText,
-    gameState,
-    setTime,
-    mode,
-    handleEnd,
-  } = useAppContext();
+  const { passage, typedText, setTypedText, gameState, handleEnd } =
+    useAppContext();
 
   // Handle key presses globally
   useEffect(() => {
@@ -45,7 +38,9 @@ export default function TypingArea() {
         {passageChars.map((char, idx) => {
           const typedChar = typedText[idx];
           let className = "";
-          if (typedChar == null) className = "";
+          if (idx === typedText.length && gameState === "running")
+            className = "cursor";
+          else if (typedChar == null) className = "";
           else if (typedChar === char) className = "correct";
           else className = "incorrect";
 

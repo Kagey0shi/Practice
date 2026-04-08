@@ -17,10 +17,57 @@ function App() {
     setMode,
     accuracy,
     wpm,
+    isDisabled,
+    isFirstTime,
+    isNewHighScore,
   } = useAppContext();
 
   return (
     <>
+      {gameState === "finished" && isNewHighScore && !isFirstTime && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>High Score Smahed!</h2>
+            <p>
+              <b>New High Score: {wpm} WPM</b>
+            </p>
+            <p>You're doing good! Keep going!</p>
+            <button onClick={handleRestart} className="start-overlay-button">
+              Start a new Test
+            </button>
+          </div>
+        </div>
+      )}
+
+      {gameState === "finished" && !isNewHighScore && !isFirstTime && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Test Over!</h2>
+            <p>
+              <b>Your WPM: {wpm}</b>
+            </p>
+            <p>You can always get better Keep going!</p>
+            <button onClick={handleRestart} className="start-overlay-button">
+              Start a new Test
+            </button>
+          </div>
+        </div>
+      )}
+
+      {gameState === "finished" && isFirstTime && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Baseline Established!</h2>
+            <p>
+              <b>Your WPM: {wpm}</b>
+            </p>
+            <p>This is your starting WPM. Try to beat it 🚀</p>
+            <button onClick={handleRestart} className="start-overlay-button">
+              Start a new Test
+            </button>
+          </div>
+        </div>
+      )}
       <Header bestWpm={bestWpm} />
       <SettingsandStats
         time={time}
@@ -30,6 +77,7 @@ function App() {
         setMode={setMode}
         accuracy={accuracy}
         wpm={wpm}
+        isDisabled={isDisabled}
       />
       <div className="typing-area-wrapper">
         {gameState === "idle" && (

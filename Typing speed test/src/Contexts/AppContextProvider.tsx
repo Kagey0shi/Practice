@@ -29,6 +29,10 @@ interface AppContextType {
   setTypedText: (typedText: string) => void;
   accuracy: number;
   wpm: number;
+  isDisabled: boolean;
+  isFirstTime: boolean;
+  setIsFirstTime: (isFirstTime: boolean) => void;
+  isNewHighScore: boolean;
 }
 
 export const AppContext = createContext<AppContextType | null>(null);
@@ -62,6 +66,13 @@ export default function AppContextProvider({
 
   const [wpm, setWpm] = useState(0);
 
+  const [isNewHighScore, setIsNewHighScore] = useState(false);
+
+  //Checking if the user has played the test before
+  const [isFirstTime, setIsFirstTime] = useState(() => {
+    return localStorage.getItem("hasPlayed") ? false : true;
+  });
+
   const [bestWpm, setBestWpm] = useState<number | null>(() => {
     const savedWpm = localStorage.getItem("bestWpm");
     return savedWpm ? Number(savedWpm) : null;
@@ -71,7 +82,11 @@ export default function AppContextProvider({
   const updateBestWPM = (newWPM: number) => {
     setBestWpm((prevBest) => {
       if (prevBest === null || newWPM > prevBest) {
-        localStorage.setItem("bestWPM", String(newWPM));
+        localStorage.setItem("bestWpm", String(newWPM));
+
+        if (prevBest !== null) {
+          setIsNewHighScore(true);
+        }
         return newWPM;
       }
       return prevBest;
@@ -84,6 +99,30 @@ export default function AppContextProvider({
     const randomIndex = Math.floor(Math.random() * passages.length);
     return passages[randomIndex].text;
   }, []);
+
+  // FUNCTION: Start game
+  const handleStart = useCallback(() => {
+    setTime(mode === "timed" ? 60 : 0); // reset timer
+    setGameState("running");
+  }, [mode]);
+
+  //Ends game when the paasge is fully typed
+  const handleEnd = () => {
+    setGameState("finished");
+    if (mode === "passage") {
+      setTime((prev) => prev); // stops the count-up
+    }
+    console.log("Finished");
+  };
+
+  // Resets the test
+  const handleRestart = () => {
+    setTime(mode === "timed" ? 60 : 0);
+    setGameState("idle");
+    setPassage(getRandomPassage(difficulty));
+    setTypedText("");
+    setIsNewHighScore(false);
+  };
 
   //setting the first WPM record
   useEffect(() => {
@@ -164,26 +203,29 @@ export default function AppContextProvider({
     setAccuracy(Math.round(calculatedAccuracy * 100) / 100); //round to 2 decimal places
   }, [typedText, passage]);
 
-  // FUNCTION: Start game
-  const handleStart = () => {
-    setTime(mode === "timed" ? 60 : 0); // reset timer
-    setGameState("running");
-  };
-
-  const handleEnd = () => {
-    setGameState("finished");
-    if (mode === "passage") {
-      setTime((prev) => prev); // stops the count-up
+  // Set isFirstTime to false after the first test
+  useEffect(() => {
+    if (gameState === "finished" && isFirstTime) {
+      setIsFirstTime(true);
+      localStorage.setItem("hasPlayed", "false");
     }
-    console.log("Finished");
-  };
+  }, [gameState, isFirstTime]);
 
-  const handleRestart = () => {
-    setTime(mode === "timed" ? 60 : 0);
-    setGameState("idle");
-    setPassage(getRandomPassage(difficulty));
-    setTypedText("");
-  };
+  // Spacebar to start
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space" && gameState === "idle") {
+        e.preventDefault(); // prevent page scroll
+        handleStart();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [gameState, handleStart]);
+
+  //Disable buttons when game is running or finished
+  const isDisabled = gameState !== "idle";
 
   return (
     <AppContext.Provider
@@ -207,6 +249,10 @@ export default function AppContextProvider({
         handleRestart,
         accuracy,
         wpm,
+        isDisabled,
+        isFirstTime,
+        setIsFirstTime,
+        isNewHighScore,
       }}
     >
       {children}
