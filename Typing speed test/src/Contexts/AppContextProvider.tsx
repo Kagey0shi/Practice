@@ -4,6 +4,7 @@ import {
   useState,
   useCallback,
   useContext,
+  useRef,
 } from "react";
 import data from "./data.json";
 
@@ -33,6 +34,7 @@ interface AppContextType {
   isFirstTime: boolean;
   setIsFirstTime: (isFirstTime: boolean) => void;
   isNewHighScore: boolean;
+  mistakes: number;
 }
 
 export const AppContext = createContext<AppContextType | null>(null);
@@ -67,6 +69,12 @@ export default function AppContextProvider({
   const [wpm, setWpm] = useState(0);
 
   const [isNewHighScore, setIsNewHighScore] = useState(false);
+
+  const mistakesRef = useRef(0);
+
+  const totalTypedRef = useRef(0);
+
+  const [mistakes, setMistakes] = useState(0);
 
   //Checking if the user has played the test before
   const [isFirstTime, setIsFirstTime] = useState(() => {
@@ -122,6 +130,7 @@ export default function AppContextProvider({
     setPassage(getRandomPassage(difficulty));
     setTypedText("");
     setIsNewHighScore(false);
+    setIsFirstTime(false);
   };
 
   //setting the first WPM record
@@ -190,24 +199,39 @@ export default function AppContextProvider({
       return;
     }
 
-    let correctCount = 0;
-    const lengthToCheck = Math.min(typedText.length, passage.length);
+    const currentLength = typedText.length;
+    const prevLength = totalTypedRef.current;
 
-    for (let i = 0; i < lengthToCheck; i++) {
-      if (typedText[i] === passage[i]) correctCount++;
+    if (currentLength > prevLength) {
+      // user typed a new character
+      totalTypedRef.current = currentLength;
+      const lastIndex = currentLength - 1;
+      if (typedText[lastIndex] !== passage[lastIndex]) {
+        mistakesRef.current += 1; // only increments, never goes down
+      }
     }
 
-    const totalTyped = typedText.length;
-    const calculatedAccuracy = (correctCount / totalTyped) * 100;
+    const calculatedAccuracy =
+      ((totalTypedRef.current - mistakesRef.current) / totalTypedRef.current) *
+      100;
 
-    setAccuracy(Math.round(calculatedAccuracy * 100) / 100); //round to 2 decimal places
+    setAccuracy(Math.round(calculatedAccuracy * 100) / 100);
   }, [typedText, passage]);
 
-  // Set isFirstTime to false after the first test
+  useEffect(() => {
+    let wrongCount = 0;
+    for (let i = 0; i < typedText.length; i++) {
+      if (typedText[i] !== passage[i]) {
+        wrongCount++;
+      }
+      setMistakes(wrongCount);
+    }
+  }, [typedText, passage]);
+
+  // Set isFirstTime to true after the first test
   useEffect(() => {
     if (gameState === "finished" && isFirstTime) {
-      setIsFirstTime(true);
-      localStorage.setItem("hasPlayed", "false");
+      localStorage.setItem("hasPlayed", "true");
     }
   }, [gameState, isFirstTime]);
 
@@ -253,6 +277,7 @@ export default function AppContextProvider({
         isFirstTime,
         setIsFirstTime,
         isNewHighScore,
+        mistakes,
       }}
     >
       {children}

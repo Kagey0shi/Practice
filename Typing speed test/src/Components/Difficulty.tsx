@@ -1,35 +1,55 @@
-import type { Difficulty } from "../Types/types";
+import type { Difficulty as DifficultyType } from "../Types/types";
+import DifficultyDropdown from "./DifficultyDropdown";
 
-export default function Difficulty({
+export default function DifficultySettings({
   setDifficulty,
   difficulty,
   isDisabled,
 }: {
-  setDifficulty: (difficulty: Difficulty) => void;
-  difficulty: Difficulty;
+  setDifficulty: (difficulty: DifficultyType) => void;
+  difficulty: DifficultyType;
   isDisabled: boolean;
 }) {
   return (
     <div className="difficulty-mode">
-      <p>Difficulty:</p>
-      <button
-        className={`settings-btn ${difficulty === "easy" ? "active" : ""}`}
-        onClick={() => !isDisabled && setDifficulty("easy")}
+      <p className="difficulty-text">Difficulty:</p>
+      <div className="difficulty-mode-container">
+        <button
+          className={`settings-btn ${difficulty === "easy" ? "active" : ""}`}
+          onClick={() => !isDisabled && setDifficulty("easy")}
+        >
+          Easy
+        </button>
+        <button
+          className={`settings-btn ${difficulty === "medium" ? "active" : ""}`}
+          onClick={() => !isDisabled && setDifficulty("medium")}
+        >
+          Medium
+        </button>
+        <button
+          className={`settings-btn ${difficulty === "hard" ? "active" : ""}`}
+          onClick={() => !isDisabled && setDifficulty("hard")}
+        >
+          Hard
+        </button>
+      </div>
+
+      {/* Tablet: dropdown */}
+      {/* <select
+        className="difficulty-mode-dropdown"
+        value={difficulty}
+        disabled={isDisabled}
+        onChange={(e) => setDifficulty(e.target.value as DifficultyType)}
       >
-        Easy
-      </button>
-      <button
-        className={`settings-btn ${difficulty === "medium" ? "active" : ""}`}
-        onClick={() => !isDisabled && setDifficulty("medium")}
-      >
-        Medium
-      </button>
-      <button
-        className={`settings-btn ${difficulty === "hard" ? "active" : ""}`}
-        onClick={() => !isDisabled && setDifficulty("hard")}
-      >
-        Hard
-      </button>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select> */}
+      <DifficultyDropdown
+        setDifficulty={setDifficulty}
+        difficulty={difficulty}
+        isDisabled={isDisabled}
+      />
     </div>
   );
 }

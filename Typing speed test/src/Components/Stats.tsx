@@ -9,17 +9,25 @@ export default function Stats({
 }) {
   return (
     <div className="stats">
-      <p>
-        WPM: <b>{wpm}</b>
-      </p>
-      <p>|</p>
-      <p>
-        Accuracy: <b>{accuracy}%</b>
-      </p>
-      <p>|</p>
-      <p>
-        Time: <b>{time}</b>
-      </p>
+      <div className="stats-cubes">
+        <p>WPM:</p>
+        <span className="stat-numbers">{wpm}</span>
+      </div>
+      <div
+        style={{
+          borderLeft: "1px solid gray",
+          borderRight: "1px solid gray",
+          padding: "0px 8px",
+        }}
+        className="stats-cubes"
+      >
+        <p>Accuracy:</p>
+        <span className="stat-numbers">{accuracy}%</span>
+      </div>
+      <div className="stats-cubes">
+        <p>Time:</p>
+        <span className="stat-numbers">{time}</span>
+      </div>
     </div>
   );
 }

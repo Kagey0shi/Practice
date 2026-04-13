@@ -5,7 +5,8 @@ export default function Best({ bestWpm }: { bestWpm: number | null }) {
     <div className="best">
       <img src={Trophy} alt="trophy" />
       <p>
-        Personal Best: <b>{bestWpm ?? 0} WPM</b>
+        <span className="personal">Personal</span> Best:{" "}
+        <b style={{ color: "#fff" }}>{bestWpm ?? 0} WPM</b>
       </p>
     </div>
   );
